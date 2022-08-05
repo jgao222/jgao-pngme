@@ -24,7 +24,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2d0165d2900ae6778e36e80bbc4da3b5eefccee9ba939761f9c2882a5d9af3ff"
 
 [[package]]
-name = "pngme"
+name = "jgao-pngme"
 version = "0.1.0"
 dependencies = [
  "anyhow",
