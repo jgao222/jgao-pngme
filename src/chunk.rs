@@ -5,6 +5,9 @@ use anyhow::{Result, Error, anyhow, bail};
 use crate::chunk_type::ChunkType;
 
 
+// The algorithm listed on the PNG spec page says the CRC algorithm used is
+// specified by ISO-3099. The polynomial given seems to match the one in
+// ISO-HDLC so that is what we use
 const CRC_CALC: Crc<u32> = Crc::<u32>::new(&CRC_32_ISO_HDLC);
 
 pub struct Chunk {
