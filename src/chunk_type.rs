@@ -3,7 +3,7 @@ use std::{str::FromStr, fmt::Display};
 use anyhow::{anyhow, Result};
 
 #[derive(PartialEq, Eq, Debug)]
-struct ChunkType {
+pub struct ChunkType {
     chunk_type: [u8; 4],
 }
 
@@ -19,8 +19,8 @@ impl ChunkType {
         // - reserved bit (3rd byte) must be 0 (uppercase)
         // - safe-to-copy bit (4th byte) must be 0 if ancillary bit (1st byte) is 0 (critical chunk)
         let a = self.is_reserved_bit_valid(); // TODO print statements
-        let b = self.is_critical();
-        let c = self.is_safe_to_copy();
+        let _b = self.is_critical();
+        let _c = self.is_safe_to_copy();
         // below is what I believe to be the correct definition of validity, but the tests seem to
         // indicate that validity is purely the validity of the reserved bit...
         // a && (if b {!c} else {true})
