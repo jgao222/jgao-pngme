@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use std::{str::FromStr, fmt::Display};
 
 use anyhow::{anyhow, Result};
@@ -18,7 +19,7 @@ impl ChunkType {
         // as far as i can tell validity consists of:
         // - reserved bit (3rd byte) must be 0 (uppercase)
         // - safe-to-copy bit (4th byte) must be 0 if ancillary bit (1st byte) is 0 (critical chunk)
-        let a = self.is_reserved_bit_valid(); // TODO print statements
+        let a = self.is_reserved_bit_valid();
         let _b = self.is_critical();
         let _c = self.is_safe_to_copy();
         // below is what I believe to be the correct definition of validity, but the tests seem to

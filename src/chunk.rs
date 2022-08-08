@@ -18,6 +18,7 @@ pub struct Chunk {
 }
 
 impl Chunk {
+    #![allow(dead_code)]
     pub fn new(chunk_type: ChunkType, data: Vec<u8>) -> Chunk {
         let mut digest = CRC_CALC.digest();
         digest.update(&chunk_type.bytes());
@@ -25,6 +26,7 @@ impl Chunk {
         Chunk {len: data.len() as u32, c_type: chunk_type, crc: digest.finalize(), data}
     }
 
+    /// returns the length of the DATA in this chunk in number of bytes
     pub fn length(&self) -> u32 {
         self.len
     }
@@ -65,9 +67,15 @@ impl TryFrom<&[u8]> for Chunk {
     type Error = Error;
 
     fn try_from(value: &[u8]) -> Result<Self> {
+        if value.len() < 12 {  // 4 bytes for length, type, and crc
+            bail!("not enough data to form one chunk")
+        }
         let size = u32::from_be_bytes(value[0..4].try_into()?);
         let start_of_crc = 8 + size as usize;
-        let crc = u32::from_be_bytes(value[start_of_crc..].try_into()?);
+        if start_of_crc > value.len() - 3 {  // if laste byte is n, then start_of_crc can be at most at n-3
+            bail!("data length mismatch, not enough bytes for CRC")
+        }
+        let crc = u32::from_be_bytes(value[start_of_crc..start_of_crc + 4].try_into()?);
         let mut data = Vec::with_capacity(size.try_into()?);
         data.extend_from_slice(&value[8..start_of_crc]);
 
@@ -87,11 +95,7 @@ impl TryFrom<&[u8]> for Chunk {
 
 impl Display for Chunk {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if let Ok(s) = std::str::from_utf8(self.data.as_ref()) {
-            write!(f, "({}, {}, {}, {})", self.len, self.c_type, self.crc, s)
-        } else {
-            Err(std::fmt::Error {})
-        }
+        write!(f, "({}, {}, {:x?}, {})", self.len, self.c_type, self.data, self.crc)
     }
 }
 
