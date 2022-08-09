@@ -12,42 +12,46 @@ pub struct CliArgs {
 
 #[derive(Subcommand, Debug)]
 pub enum Command {
+    /// Encode a messages into a file in chunk of given type, overwriting existing chunks of that type
     Encode(Encode),
+    /// Decode a message from a file from given chunk type, printing to stdout
     Decode(Decode),
+    /// Remove all chunks of the type (and their data) from the file
     Remove(Remove),
+    /// Print all chunk data that can be parsed as character strings
     Print(Print),
 }
 
 #[derive(Args, Debug)]
 pub struct Encode {
     #[clap(value_parser)]
-    file_path: PathBuf,
+    pub file_path: PathBuf,
     #[clap(value_parser)]
-    chunk_type: String,
+    pub chunk_type: String,
     #[clap(value_parser)]
-    message: String,
+    pub message: String,
     #[clap(value_parser)]
-    output_file: Option<PathBuf>
+    pub output_file: Option<PathBuf>
 }
 
 #[derive(Args, Debug)]
 pub struct Decode {
     #[clap(value_parser)]
-    file_path: PathBuf,
+    pub file_path: PathBuf,
     #[clap(value_parser)]
-    chunk_type: String,
+    pub chunk_type: String,
 }
 
 #[derive(Args, Debug)]
 pub struct Remove {
     #[clap(value_parser)]
-    file_path: PathBuf,
+    pub file_path: PathBuf,
     #[clap(value_parser)]
-    chunk_type: String,
+    pub chunk_type: String,
 }
 
 #[derive(Args, Debug)]
 pub struct Print {
     #[clap(value_parser)]
-    file_path: PathBuf,
+    pub file_path: PathBuf,
 }

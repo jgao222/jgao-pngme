@@ -44,7 +44,6 @@ impl Chunk {
     }
 
     pub fn data_as_string(&self) -> Result<String> {
-        println!("{}", String::from_utf8_lossy(self.data.as_ref()));
         if let Ok(s) = String::from_utf8(self.data.clone()) {
             Ok(s)
         } else {
